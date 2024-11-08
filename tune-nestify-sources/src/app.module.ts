@@ -5,8 +5,10 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AdminModule } from './modules/admin/admin.module';
 import { User } from './modules/users/entities/user.entity';
-import { AppController } from './app.controller'; // Thêm dòng này
-import { AppService } from './app.service'; // Thêm dòng này
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { ArtistsModule } from './modules/artists/artists.module';
+import { Artist } from './modules/artists/entities/artist.entity';
 
 @Module({
   imports: [
@@ -22,7 +24,7 @@ import { AppService } from './app.service'; // Thêm dòng này
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [User],
+        entities: [User, Artist],
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -30,6 +32,7 @@ import { AppService } from './app.service'; // Thêm dòng này
     UsersModule,
     AuthModule,
     AdminModule,
+    ArtistsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

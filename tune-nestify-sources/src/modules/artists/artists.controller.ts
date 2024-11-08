@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
+import { ApiBody } from '@nestjs/swagger';
 
 @Controller('artists')
 export class ArtistsController {
@@ -30,5 +31,16 @@ export class ArtistsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.artistsService.remove(+id);
+  }
+
+  @Post('spotify/:id')
+  createFromSpotify(@Param('id') id: string) {
+    return this.artistsService.createFromSpotify(id);
+  }
+
+  @Post('spotify')
+  @ApiBody({ type: [String], description: 'Spotify artist IDs', examples: { 'example': { value: ['1dfeR4HaWDbWqFHLkxsg1d', '1Xyo4u8uXC1ZmMpatF05PJ'] } } })
+  createFromSpotifySeveral(@Body() spotifyIds: string[]) {
+    return this.artistsService.createFromSpotifySeveral(spotifyIds);
   }
 }
