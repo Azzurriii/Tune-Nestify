@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: tune-nestify-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=tune_nestify
+    depends_on:
+      - postgres
+    networks:
+      - tune-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: tune-nestify-database
+    environment:
+      POSTGRES_DB: tune_nestify
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - tune-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: tune-nestify-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - tune-network
+
+networks:
+  tune-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
